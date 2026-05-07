@@ -4,6 +4,13 @@ import json
 import random
 import string
 from datetime import datetime
+import requests
+import os
+from dotenv import loadenv
+load_dotenv()
+
+BOLNA_API_KEY = os.getenv("BOLNA_API_KEY")
+BOLNA_AGENT_ID = os.getenv("BOLNA_AGENT_ID")
 
 app = Flask(__name__)
 CORS(app)
@@ -218,6 +225,39 @@ def get_complaints():
     })
 
 
+@app.route("/start-call", methods=["POST"])
+def start_call():
+
+    data = request.get_json()
+
+    phone_number = data.get("phone_number")
+
+    if not phone_number:
+        return jsonify({
+            "success": False,
+            "message": "Phone number is required"
+        }), 400
+
+    url = "https://api.bolna.ai/call"
+
+    payload = {
+        "agent_id": BOLNA_AGENT_ID,
+        "recipient_phone_number": phone_number,
+        "bypass_call_guardrails": True
+    }
+
+    headers = {
+        "Authorization": f"Bearer {BOLNA_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    response = requests.post(
+        url,
+        json=payload,
+        headers=headers
+    )
+
+    return jsonify(response.json())
 
 
 if __name__ == "__main__":
