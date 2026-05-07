@@ -7,11 +7,40 @@ from datetime import datetime
 import requests
 import os
 from dotenv import load_dotenv
-
 load_dotenv()
 
 BOLNA_API_KEY = os.getenv("BOLNA_API_KEY")
 BOLNA_AGENT_ID = os.getenv("BOLNA_AGENT_ID")
+import logging
+from logging.handlers import RotatingFileHandler
+import os
+
+if not os.path.exists("logs"):
+    os.makedirs("logs")
+
+logger = logging.getLogger("lpg_workflow_logger")
+
+logger.setLevel(logging.INFO)
+
+formatter = logging.Formatter(
+    "[%(asctime)s] %(levelname)s in %(module)s: %(message)s"
+)
+
+file_handler = RotatingFileHandler(
+    "logs/app.log",
+    maxBytes=1024 * 1024,
+    backupCount=5
+)
+
+file_handler.setFormatter(formatter)
+
+console_handler = logging.StreamHandler()
+console_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
+logger.addHandler(console_handler)
+
+
 
 app = Flask(__name__)
 CORS(app)
@@ -63,14 +92,20 @@ def health():
 
 
 @app.route("/lookup-customer", methods=["POST"])
+@app.route("/lookup-customer", methods=["POST"])
 def lookup_customer():
 
     data = request.get_json()
-        
+
+    logger.info(f"Incoming lookup request: {data}")
+
     phone = data.get("phone")
     name = data.get("name")
 
     if not phone or not name:
+
+        logger.warning("Missing phone or name in lookup request")
+
         return jsonify({
             "success": False,
             "message": "Name and phone are required"
@@ -85,14 +120,22 @@ def lookup_customer():
     )
 
     if not customer:
+
+        logger.warning(
+            f"Customer verification failed for name={name}, phone={phone}"
+        )
+
         return jsonify({
             "success": False,
             "message": "Customer verification failed"
         }), 404
 
+    logger.info(
+        f"Customer verified successfully: {customer['consumer_id']}"
+    )
+
     return jsonify({
         "success": True,
-        "message": "Customer verified successfully",
         "customer": {
             "name": customer["name"],
             "phone": customer["phone"],
@@ -102,16 +145,19 @@ def lookup_customer():
     })
 
 
-
 @app.route("/book-cylinder", methods=["POST"])
 def book_cylinder():
 
     data = request.get_json()
-    print("Incoming Booking Payload:", data)
+
+    logger.info(f"Incoming booking request: {data}")
 
     consumer_id = data.get("consumer_id")
 
     if not consumer_id:
+
+        logger.warning("Booking failed due to missing consumer_id")
+
         return jsonify({
             "success": False,
             "message": "Consumer ID is required"
@@ -130,6 +176,10 @@ def book_cylinder():
     bookings.append(booking)
 
     save_bookings()
+
+    logger.info(
+        f"Booking created successfully: booking_id={booking_id}"
+    )
 
     return jsonify({
         "success": True,
