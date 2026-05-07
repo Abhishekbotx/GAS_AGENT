@@ -1,0 +1,8 @@
+[
+  {
+    "booking_id": "BK123456",
+    "consumer_id": "CN102938",
+    "status": "Confirmed",
+    "delivery_eta": "2 days"
+  }
+]
