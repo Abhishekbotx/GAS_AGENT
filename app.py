@@ -6,7 +6,8 @@ import string
 from datetime import datetime
 import requests
 import os
-from dotenv import loadenv
+from dotenv import load_dotenv
+
 load_dotenv()
 
 BOLNA_API_KEY = os.getenv("BOLNA_API_KEY")
