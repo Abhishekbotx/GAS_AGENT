@@ -60,26 +60,31 @@ def lookup_customer():
     data = request.get_json()
 
     phone = data.get("phone")
+    name = data.get("name")
 
-    if not phone:
+    if not phone or not name:
         return jsonify({
             "success": False,
-            "message": "Phone number is required"
+            "message": "Name and phone are required"
         }), 400
 
     customer = next(
-        (c for c in customers if c["phone"] == phone),
+        (
+            c for c in customers
+            if c["phone"] == phone and c["name"].lower() == name.lower()
+        ),
         None
     )
 
     if not customer:
         return jsonify({
             "success": False,
-            "message": "Customer not found"
+            "message": "Customer verification failed"
         }), 404
 
     return jsonify({
         "success": True,
+        "message": "Customer verified successfully",
         "customer": {
             "name": customer["name"],
             "phone": customer["phone"],
