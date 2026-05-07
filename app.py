@@ -66,7 +66,7 @@ def health():
 def lookup_customer():
 
     data = request.get_json()
-
+        
     phone = data.get("phone")
     name = data.get("name")
 
@@ -107,6 +107,7 @@ def lookup_customer():
 def book_cylinder():
 
     data = request.get_json()
+    print("Incoming Booking Payload:", data)
 
     consumer_id = data.get("consumer_id")
 
@@ -142,7 +143,7 @@ def book_cylinder():
 def check_status():
 
     data = request.get_json()
-
+    print("Incoming Lookup Payload:", data)
     consumer_id = data.get("consumer_id")
 
     if not consumer_id:
@@ -176,7 +177,7 @@ def check_status():
 def raise_complaint():
 
     data = request.get_json()
-
+    print("Incoming Lookup Payload:", data)
     consumer_id = data.get("consumer_id")
     issue = data.get("issue")
 
