@@ -1,18 +1,8 @@
 [
   {
-    "customer_id": "CUS001",
     "name": "Abhishek Raj",
     "phone": "7050109898",
     "consumer_id": "CN102938",
-    "address": "Patna",
-    "location": "Bihar"
-  },
-  {
-    "customer_id": "CUS002",
-    "name": "Abhishek Raj",
-    "phone": "7050109898",
-    "consumer_id": "CN102937",
-    "address": "Patna",
     "location": "Bihar"
   }
 ]

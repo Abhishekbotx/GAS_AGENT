@@ -3,277 +3,734 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LPG Support AI Dashboard</title>
+
+  <title>LPG Support AI</title>
+
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body{
+      font-family: 'Inter', sans-serif;
+    }
+
+    .glass{
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .wave span{
+      animation: wave 1s infinite ease-in-out;
+    }
+
+    .wave span:nth-child(2){
+      animation-delay: .15s;
+    }
+
+    .wave span:nth-child(3){
+      animation-delay: .3s;
+    }
+
+    .wave span:nth-child(4){
+      animation-delay: .45s;
+    }
+
+    @keyframes wave{
+      0%,100%{
+        height: 8px;
+      }
+      50%{
+        height: 30px;
+      }
+    }
+
+    .typing span{
+      animation: blink 1s infinite;
+    }
+
+    .typing span:nth-child(2){
+      animation-delay: .2s;
+    }
+
+    .typing span:nth-child(3){
+      animation-delay: .4s;
+    }
+
+    @keyframes blink{
+      0%,100%{
+        opacity:.3;
+      }
+      50%{
+        opacity:1;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-6 font-sans">
 
-  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+<body class="bg-[#0b0f14] text-white overflow-hidden">
 
-    <!-- LEFT PANEL -->
-    <div class="lg:col-span-2 bg-white rounded-3xl shadow-lg p-6">
+<!-- LOOKUP SCREEN -->
+<section id="lookup-screen" class="min-h-screen flex items-center justify-center px-5">
 
-      <div class="flex items-center justify-between mb-6">
+  <div class="w-full max-w-md">
+
+    <div class="mb-10">
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-12 h-12 rounded-2xl bg-orange-500 flex items-center justify-center text-2xl">
+          🔥
+        </div>
+
         <div>
-          <h1 class="text-3xl font-bold">LPG Support AI Assistant</h1>
-          <p class="text-gray-500 mt-1">
-            Voice powered LPG customer support automation
+          <h1 class="text-xl font-bold">
+            LPG Support AI
+          </h1>
+
+          <p class="text-sm text-zinc-400">
+            IndianOil Voice Agent
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-4xl font-extrabold leading-tight mb-4">
+        Verify your
+        <span class="text-orange-500">
+          LPG account
+        </span>
+      </h2>
+
+      <p class="text-zinc-400 leading-relaxed">
+        Enter your registered phone number and our AI agent will call you automatically.
+      </p>
+    </div>
+
+    <div class="glass rounded-3xl p-6">
+
+      <div class="space-y-5">
+
+        <div>
+          <label class="text-sm text-zinc-400 block mb-2">
+            Full Name
+          </label>
+
+          <input
+            id="name"
+            type="text"
+            placeholder="Abhishek Raj"
+            class="w-full bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-4 outline-none focus:border-orange-500"
+          />
+        </div>
+
+        <div>
+          <label class="text-sm text-zinc-400 block mb-2">
+            Phone Number
+          </label>
+
+          <input
+            id="phone"
+            type="text"
+            maxlength="10"
+            placeholder="9876543210"
+            class="w-full bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-4 outline-none focus:border-orange-500"
+          />
+
+          <p id="error" class="text-red-400 text-sm mt-2 hidden">
+            Invalid mobile number
           </p>
         </div>
 
-        <div class="flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
-          <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-          Agent Online
-        </div>
-      </div>
-
-      <!-- VOICE CARD -->
-      <div class="bg-gradient-to-br from-orange-500 to-red-500 rounded-3xl p-10 text-white text-center flex flex-col items-center">
-
-        <div class="w-32 h-32 rounded-full bg-white/20 flex items-center justify-center text-5xl mb-6 animate-pulse shadow-2xl">
-          🎤
-        </div>
-
-        <h2 class="text-2xl font-bold mb-2">Talk to LPG Assistant</h2>
-
-        <p class="max-w-md text-white/90 mb-8">
-          Book cylinders, check delivery status, raise complaints and get support instantly.
-        </p>
-
-        <button id="startBtn" class="bg-white text-orange-600 font-semibold px-8 py-4 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
-          Start Voice Conversation
+        <button
+          id="verify-btn"
+          class="w-full bg-orange-500 hover:bg-orange-600 transition-all rounded-2xl py-4 font-semibold text-lg"
+        >
+          Verify & Continue
         </button>
-      </div>
 
-      <!-- LIVE CHAT -->
-      <div class="mt-6">
-        <h3 class="text-xl font-semibold mb-4">Live Conversation</h3>
-
-        <div class="space-y-4 max-h-[420px] overflow-y-auto pr-2">
-
-          <div class="flex justify-start">
-            <div class="bg-gray-100 px-5 py-4 rounded-2xl max-w-md shadow-sm">
-              <p class="text-sm text-gray-700">
-                Welcome to LPG Support Assistant. How may I help you today?
-              </p>
-            </div>
-          </div>
-
-          <div class="flex justify-end">
-            <div class="bg-orange-500 text-white px-5 py-4 rounded-2xl max-w-md shadow-sm">
-              <p class="text-sm">
-                I want to book a cylinder.
-              </p>
-            </div>
-          </div>
-
-          <div class="flex justify-start">
-            <div class="bg-gray-100 px-5 py-4 rounded-2xl max-w-md shadow-sm">
-              <p class="text-sm text-gray-700">
-                Sure. Please share your registered mobile number.
-              </p>
-            </div>
-          </div>
-
-          <div class="flex justify-end">
-            <div class="bg-orange-500 text-white px-5 py-4 rounded-2xl max-w-md shadow-sm">
-              <p class="text-sm">
-                9876543210
-              </p>
-            </div>
-          </div>
-
-          <div class="flex justify-start">
-            <div class="bg-gray-100 px-5 py-4 rounded-2xl max-w-md shadow-sm">
-              <p class="text-sm text-gray-700">
-                Thank you. I found your LPG account under the name Abhishek Raj.
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-    </div>
-
-    <!-- RIGHT PANEL -->
-    <div class="space-y-6">
-
-      <!-- CUSTOMER DETAILS -->
-      <div class="bg-white rounded-3xl shadow-lg p-6">
-        <h3 class="text-xl font-semibold mb-4">Customer Details</h3>
-
-        <div class="space-y-4 text-sm">
-          <div>
-            <p class="text-gray-500">Customer Name</p>
-            <p class="font-semibold text-lg">Abhishek Raj</p>
-          </div>
-
-          <div>
-            <p class="text-gray-500">Phone Number</p>
-            <p class="font-semibold">9876543210</p>
-          </div>
-
-          <div>
-            <p class="text-gray-500">Consumer ID</p>
-            <p class="font-semibold">XXXX2938</p>
-          </div>
-
-          <div>
-            <p class="text-gray-500">Location</p>
-            <p class="font-semibold">Patna, Bihar</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- WORKFLOW -->
-      <div class="bg-white rounded-3xl shadow-lg p-6">
-        <h3 class="text-xl font-semibold mb-4">Workflow Engine</h3>
-
-        <div class="space-y-4 text-sm">
-
-          <div class="flex items-center justify-between bg-gray-50 rounded-xl p-3">
-            <span>Intent Detection</span>
-            <span class="text-green-600 font-medium">Completed</span>
-          </div>
-
-          <div class="flex items-center justify-between bg-gray-50 rounded-xl p-3">
-            <span>Customer Lookup</span>
-            <span class="text-green-600 font-medium">Success</span>
-          </div>
-
-          <div class="flex items-center justify-between bg-gray-50 rounded-xl p-3">
-            <span>Booking Workflow</span>
-            <span class="text-yellow-600 font-medium">Running</span>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- TOOL CALLS -->
-      <div class="bg-white rounded-3xl shadow-lg p-6">
-        <h3 class="text-xl font-semibold mb-4">Webhook & Tool Calls</h3>
-
-        <div class="space-y-3 text-sm">
-
-          <div class="bg-green-50 border border-green-200 rounded-xl p-4">
-            <p class="font-semibold text-green-700">✓ lookup_customer()</p>
-            <p class="text-gray-600 mt-1">
-              Customer profile fetched successfully.
-            </p>
-          </div>
-
-          <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-            <p class="font-semibold text-yellow-700">⏳ create_booking()</p>
-            <p class="text-gray-600 mt-1">
-              Waiting for booking confirmation.
-            </p>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- SYSTEM STATUS -->
-      <div class="bg-white rounded-3xl shadow-lg p-6">
-        <h3 class="text-xl font-semibold mb-4">System Status</h3>
-
-        <div class="space-y-3 text-sm">
-
-          <div class="flex justify-between">
-            <span>Bolna Agent</span>
-            <span class="text-green-600 font-medium">Online</span>
-          </div>
-
-          <div class="flex justify-between">
-            <span>Flask Backend</span>
-            <span class="text-green-600 font-medium">Healthy</span>
-          </div>
-
-          <div class="flex justify-between">
-            <span>Webhook APIs</span>
-            <span class="text-green-600 font-medium">Connected</span>
-          </div>
-
-          <div class="flex justify-between">
-            <span>Voice Session</span>
-            <span class="text-orange-600 font-medium">Active</span>
-          </div>
-
-        </div>
       </div>
 
     </div>
 
   </div>
 
-  <script>
-    const startBtn = document.getElementById('startBtn');
+</section>
 
-    const transcriptContainer = document.querySelector('.space-y-4');
+<!-- MAIN DASHBOARD -->
+<section
+  id="dashboard"
+  class="hidden h-screen grid lg:grid-cols-[1fr_360px] overflow-hidden"
+>
 
-    function appendUserMessage(message) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'flex justify-end';
+  <!-- LEFT -->
+  <div class="flex flex-col border-r border-zinc-800">
 
-      wrapper.innerHTML = `
-        <div class="bg-orange-500 text-white px-5 py-4 rounded-2xl max-w-md shadow-sm">
-          <p class="text-sm">${message}</p>
+    <!-- HEADER -->
+    <div class="h-20 border-b border-zinc-800 flex items-center justify-between px-6">
+
+      <div class="flex items-center gap-3">
+
+        <div class="w-12 h-12 rounded-2xl bg-orange-500 flex items-center justify-center text-xl">
+          🔥
         </div>
-      `;
 
-      transcriptContainer.appendChild(wrapper);
-    }
+        <div>
+          <h2 class="font-bold text-lg">
+            LPG Support AI
+          </h2>
 
-    function appendBotMessage(message) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'flex justify-start';
-
-      wrapper.innerHTML = `
-        <div class="bg-gray-100 px-5 py-4 rounded-2xl max-w-md shadow-sm">
-          <p class="text-sm text-gray-700">${message}</p>
+          <p class="text-zinc-400 text-sm">
+            Voice Workflow Engine
+          </p>
         </div>
-      `;
 
-      transcriptContainer.appendChild(wrapper);
+      </div>
+
+      <div class="flex items-center gap-3">
+
+        <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800">
+          <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          <span class="text-sm text-zinc-300">
+            Online
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- VOICE CARD -->
+    <div class="p-6">
+
+      <div class="rounded-3xl bg-gradient-to-br from-orange-600 to-orange-800 p-8 relative overflow-hidden">
+
+        <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center gap-6 justify-between">
+
+          <div class="flex items-center gap-5">
+
+            <div class="w-20 h-20 rounded-3xl bg-white/10 flex items-center justify-center">
+
+              <div class="wave flex items-end gap-1 h-8">
+                <span class="w-1 rounded-full bg-white"></span>
+                <span class="w-1 rounded-full bg-white"></span>
+                <span class="w-1 rounded-full bg-white"></span>
+                <span class="w-1 rounded-full bg-white"></span>
+              </div>
+
+            </div>
+
+            <div>
+
+              <h2
+                id="call-title"
+                class="text-3xl font-bold mb-2"
+              >
+                Ready to Call
+              </h2>
+
+              <p
+                id="call-subtitle"
+                class="text-orange-100"
+              >
+                AI agent will call your number
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="space-y-3">
+
+            <button
+              id="call-btn"
+              class="bg-white text-orange-700 px-8 py-4 rounded-2xl font-bold hover:scale-105 transition-all"
+            >
+              Start Voice Call
+            </button>
+
+            <div
+              id="call-timer"
+              class="hidden text-center text-orange-100 text-sm"
+            >
+              00:00
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TRANSCRIPT -->
+    <div class="flex-1 overflow-y-auto px-6 pb-6">
+
+      <div class="flex items-center justify-between mb-4">
+
+        <h3 class="font-bold text-lg">
+          Live Transcript
+        </h3>
+
+        <div
+          id="call-status"
+          class="text-sm px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300"
+        >
+          Waiting
+        </div>
+
+      </div>
+
+      <div
+        id="transcript"
+        class="space-y-4"
+      >
+
+        <div class="flex gap-3">
+
+          <div class="w-10 h-10 rounded-2xl bg-orange-500 flex items-center justify-center">
+            AI
+          </div>
+
+          <div class="glass rounded-2xl p-4 max-w-xl">
+            Welcome 👋 Verify your account and start your AI powered LPG support call.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="bg-[#0f141b] overflow-y-auto">
+
+    <div class="p-6 space-y-6">
+
+      <!-- CUSTOMER -->
+      <div class="glass rounded-3xl p-6">
+
+        <div class="flex items-center justify-between mb-6">
+
+          <h3 class="font-bold text-lg">
+            Customer
+          </h3>
+
+          <div class="text-green-400 text-sm">
+            Verified
+          </div>
+
+        </div>
+
+        <div class="space-y-5">
+
+          <div>
+            <p class="text-zinc-500 text-sm mb-1">
+              Name
+            </p>
+
+            <h4
+              id="cust-name"
+              class="text-xl font-bold"
+            >
+              —
+            </h4>
+          </div>
+
+          <div>
+            <p class="text-zinc-500 text-sm mb-1">
+              Phone
+            </p>
+
+            <div
+              id="cust-phone"
+              class="font-medium"
+            >
+              —
+            </div>
+          </div>
+
+          <div>
+            <p class="text-zinc-500 text-sm mb-1">
+              Consumer ID
+            </p>
+
+            <div
+              id="cust-id"
+              class="inline-flex px-3 py-2 rounded-xl bg-orange-500/10 text-orange-400"
+            >
+              —
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- WORKFLOW -->
+      <div class="glass rounded-3xl p-6">
+
+        <h3 class="font-bold text-lg mb-5">
+          Workflow
+        </h3>
+
+        <div class="space-y-4">
+
+          <div class="flex items-center justify-between">
+            <span>Lookup</span>
+            <span id="wf-lookup" class="text-green-400">
+              Done
+            </span>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <span>Voice Call</span>
+            <span id="wf-call" class="text-yellow-400">
+              Pending
+            </span>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <span>Intent Detection</span>
+            <span id="wf-intent" class="text-zinc-500">
+              Waiting
+            </span>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <span>Action Execution</span>
+            <span id="wf-action" class="text-zinc-500">
+              Waiting
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- TOOL CALLS -->
+      <div class="glass rounded-3xl p-6">
+
+        <h3 class="font-bold text-lg mb-5">
+          Tool Calls
+        </h3>
+
+        <div
+          id="tool-calls"
+          class="space-y-3"
+        >
+
+          <div class="text-zinc-500 text-sm">
+            Waiting for AI workflow...
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<script>
+
+const API = "https://gas-agent.onrender.com";
+
+const els = {
+  lookup: document.getElementById("lookup-screen"),
+  dashboard: document.getElementById("dashboard"),
+
+  name: document.getElementById("name"),
+  phone: document.getElementById("phone"),
+
+  verifyBtn: document.getElementById("verify-btn"),
+  error: document.getElementById("error"),
+
+  custName: document.getElementById("cust-name"),
+  custPhone: document.getElementById("cust-phone"),
+  custId: document.getElementById("cust-id"),
+
+  callBtn: document.getElementById("call-btn"),
+  transcript: document.getElementById("transcript"),
+  callStatus: document.getElementById("call-status"),
+
+  callTitle: document.getElementById("call-title"),
+  callSubtitle: document.getElementById("call-subtitle"),
+
+  wfCall: document.getElementById("wf-call"),
+  wfIntent: document.getElementById("wf-intent"),
+  wfAction: document.getElementById("wf-action"),
+
+  toolCalls: document.getElementById("tool-calls"),
+
+  timer: document.getElementById("call-timer")
+};
+
+let customer = null;
+let timer = null;
+let seconds = 0;
+
+function appendMessage(type, text){
+
+  const wrapper = document.createElement("div");
+
+  wrapper.className = `flex gap-3 ${type === "user" ? "justify-end" : ""}`;
+
+  wrapper.innerHTML = `
+    ${
+      type === "bot"
+      ?
+      `
+      <div class="w-10 h-10 rounded-2xl bg-orange-500 flex items-center justify-center shrink-0">
+        AI
+      </div>
+      `
+      :
+      ""
     }
 
-    async function sendMessageToBackend(message) {
-      try {
-        const response = await fetch('http://127.0.0.1:5000/api/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            message: message,
-            session_fields: {}
-          })
-        });
+    <div class="glass rounded-2xl p-4 max-w-xl leading-relaxed">
+      ${text}
+    </div>
+  `;
 
-        const data = await response.json();
+  els.transcript.appendChild(wrapper);
 
-        console.log('Backend Response:', data);
+  els.transcript.scrollTop = els.transcript.scrollHeight;
+}
 
-        appendBotMessage(data.response);
+function addToolCall(name, status){
 
-      } catch (error) {
-        console.error(error);
-        appendBotMessage('Unable to connect with backend server.');
-      }
-    }
+  const div = document.createElement("div");
 
-    startBtn.addEventListener('click', async () => {
-      startBtn.innerText = 'Voice Session Active';
+  div.className = `
+    border border-zinc-800 rounded-2xl p-4 text-sm
+    ${status === "success" ? "bg-green-500/10 text-green-400" : ""}
+    ${status === "pending" ? "bg-yellow-500/10 text-yellow-400" : ""}
+  `;
 
-      // TEMPORARY SIMULATION
-      // Replace this later with Bolna SDK voice transcript
+  div.innerHTML = `
+    <div class="font-semibold mb-1">
+      ${name}
+    </div>
 
-      const simulatedUserInput = 'I want to book a cylinder';
+    <div class="text-zinc-300">
+      ${status}
+    </div>
+  `;
 
-      appendUserMessage(simulatedUserInput);
+  els.toolCalls.prepend(div);
+}
 
-      await sendMessageToBackend(simulatedUserInput);
+function formatTime(sec){
+
+  const mins = Math.floor(sec / 60).toString().padStart(2, "0");
+  const secs = (sec % 60).toString().padStart(2, "0");
+
+  return `${mins}:${secs}`;
+}
+
+async function verifyCustomer(){
+
+  const name = els.name.value.trim();
+  const phone = els.phone.value.trim();
+
+  if(!/^[6-9]\d{9}$/.test(phone)){
+    els.error.classList.remove("hidden");
+    return;
+  }
+
+  els.error.classList.add("hidden");
+
+  els.verifyBtn.disabled = true;
+  els.verifyBtn.innerText = "Verifying...";
+
+  try{
+
+    const res = await fetch(`${API}/lookup-customer`,{
+      method: "POST",
+      headers: {
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        name,
+        phone
+      })
     });
-  </script>
+
+    const data = await res.json();
+
+    if(!data.success){
+      throw new Error("Customer not found");
+    }
+
+    customer = data.customer;
+
+    els.custName.innerText = customer.name;
+    els.custPhone.innerText = customer.phone;
+    els.custId.innerText = customer.consumer_id;
+
+    els.lookup.classList.add("hidden");
+    els.dashboard.classList.remove("hidden");
+
+    appendMessage(
+      "bot",
+      `Welcome ${customer.name}. Your account has been verified successfully.`
+    );
+
+  }catch(err){
+
+    els.error.classList.remove("hidden");
+    els.error.innerText = err.message;
+
+  }
+
+  els.verifyBtn.disabled = false;
+  els.verifyBtn.innerText = "Verify & Continue";
+}
+
+async function startCall(){
+
+  els.callBtn.disabled = true;
+
+  els.callBtn.innerText = "Connecting...";
+  els.callStatus.innerText = "Connecting";
+  els.callStatus.className = `
+    text-sm px-4 py-2 rounded-full
+    bg-yellow-500/10 text-yellow-400
+  `;
+
+  els.callTitle.innerText = "Calling User";
+  els.callSubtitle.innerText = `Calling +91 ${customer.phone}`;
+
+  addToolCall("start_call()", "pending");
+
+  appendMessage(
+    "bot",
+    "Initiating voice AI call..."
+  );
+
+  try{
+
+    const res = await fetch(`${API}/start-call`,{
+      method: "POST",
+      headers: {
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        phone_number: `+91${customer.phone}`
+      })
+    });
+
+    const data = await res.json();
+
+    els.wfCall.innerText = "Connected";
+    els.wfIntent.innerText = "Listening";
+
+    els.callStatus.innerText = "In Progress";
+
+    els.callTitle.innerText = "Voice Call Active";
+    els.callSubtitle.innerText = "AI is speaking with customer";
+
+    els.callBtn.innerText = "Call Active";
+
+    els.timer.classList.remove("hidden");
+
+    timer = setInterval(() => {
+
+      seconds++;
+
+      els.timer.innerText = formatTime(seconds);
+
+    },1000);
+
+    addToolCall("bolna_voice_agent()", "success");
+
+    appendMessage(
+      "bot",
+      "Voice call connected successfully."
+    );
+
+    pollCallResult(data.call_id);
+
+  }catch(err){
+
+    els.callBtn.disabled = false;
+    els.callBtn.innerText = "Retry Call";
+
+    appendMessage(
+      "bot",
+      `Call failed: ${err.message}`
+    );
+
+  }
+
+}
+
+async function pollCallResult(callId){
+
+  let attempts = 0;
+
+  const interval = setInterval(async ()=>{
+
+    attempts++;
+
+    if(attempts > 40){
+      clearInterval(interval);
+      return;
+    }
+
+    try{
+
+      const res = await fetch(`${API}/call-result/${callId}`);
+
+      const data = await res.json();
+
+      if(data.status === "completed"){
+
+        clearInterval(interval);
+        clearInterval(timer);
+
+        els.callStatus.innerText = "Completed";
+
+        els.callTitle.innerText = "Call Completed";
+        els.callSubtitle.innerText = "Workflow finished";
+
+        els.wfIntent.innerText = "Detected";
+        els.wfAction.innerText = "Executed";
+
+        appendMessage(
+          "bot",
+          `
+          Intent: ${data.intent || "booking"} <br/><br/>
+          Summary: ${data.summary || "Cylinder booking completed"}
+          `
+        );
+
+        addToolCall("intent_detection()", "success");
+        addToolCall("execute_action()", "success");
+
+      }
+
+    }catch(err){
+      console.log(err);
+    }
+
+  },3000);
+
+}
+
+els.verifyBtn.addEventListener("click", verifyCustomer);
+
+els.callBtn.addEventListener("click", startCall);
+
+</script>
+
 </body>
 </html>

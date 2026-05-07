@@ -311,7 +311,67 @@ def start_call():
 
     return jsonify(response.json())
 
+@app.route("/register-customer", methods=["POST"])
+def register_customer():
+
+    data = request.get_json()
+
+    name = data.get("name") 
+    phone = data.get("phone")
+    location = data.get("location")
+
+    if not name or not phone or not location:
+        return jsonify({
+            "success": False,
+            "message": "All fields are required"
+        }), 400
+
+    existing_customer = next(
+        (c for c in customers if c["phone"] == phone),
+        None
+    )
+
+    if existing_customer:
+        return jsonify({
+            "success": False,
+            "message": "Customer already exists"
+        }), 409
+
+    last_customer_number = 10000
+
+    if customers:
+
+        ids = [
+            int(c["consumer_id"].replace("CN", ""))
+            for c in customers
+        ]
+
+        last_customer_number = max(ids)
+
+    new_consumer_id = f"CN{last_customer_number + 1}"
+
+    customer = {
+        "name": name,
+        "phone": phone,
+        "consumer_id": new_consumer_id,
+        "location": location
+    }
+
+    customers.append(customer)
+
+    with open("customers.json", "w") as file:
+        json.dump(customers, file, indent=2)
+
+    logger.info(
+        f"Customer registered successfully: {new_consumer_id}"
+    )
+
+    return jsonify({
+        "success": True,
+        "message": "Customer registered successfully",
+        "customer": customer
+    })
 
 if __name__ == "__main__":
     print(" Gas Agent Backend Running on http://127.0.0.1:5000")
-    app.run(debug=True)
+    app.run(debug=True,port=5000)
